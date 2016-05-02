@@ -16,11 +16,14 @@ import com.vmg.model.Category;
 import com.vmg.model.Register;
 import com.vmg.service.CategoryService;
 import com.vmg.service.RegisterService;
+import com.vmg.validator.LoginValidator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Dinesh Rajput
@@ -34,11 +37,21 @@ public class LoginController {
         
 	@Autowired
 	private CategoryService categoryService;
+        
+        @Autowired
+        LoginValidator loginValidator;
 	
 	@RequestMapping(value = "/registration", method = RequestMethod.POST)
 	public ModelAndView saveUserDetails(HttpServletRequest request,@ModelAttribute("registerBean") RegisterBean registerBean, 
 			BindingResult result) {
-//                String parameter = request.getParameter("result");
+                //Validation code
+                loginValidator.validate(registerBean, result);
+
+                //Check validation errors
+                if (result.hasErrors()) {
+                    return new ModelAndView("register");
+                }
+                
                 ProjectHelper projectHelper = new ProjectHelper();
 		Register register = projectHelper.prepareModel(registerBean);
                 registerService.addUserDetails(register);
@@ -53,6 +66,13 @@ public class LoginController {
             String role = registerBean.getRole();
             
             HttpSession session = request.getSession(true);
+            
+            //Validation code
+            loginValidator.validate(registerBean, result);
+            //Check validation errors
+                if (result.hasErrors()) {
+                    return new ModelAndView("redirect:index.html");
+                }
             boolean isValidUser = registerService.isValidUser(userName, password,role);
             if (isValidUser) {
                 session.setAttribute("userid", userName);
