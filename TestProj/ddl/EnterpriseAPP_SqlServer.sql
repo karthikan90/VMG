@@ -15,3 +15,4 @@ create table Category(
   INSERT INTO [dbo].[Category] ([category_name]) VALUES ('Electronics')
   INSERT INTO [dbo].[Category] ([category_name]) VALUES ('Home Appliances')
   INSERT INTO [dbo].[Category] ([category_name]) VALUES ('Clothing')
+  INSERT INTO [dbo].[Category] ([category_name]) VALUES ('Clothing')
