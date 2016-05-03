@@ -13,9 +13,13 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Registration</title>
+        <style>
         .error {
-                color: red; font-weight: bold;
-            }
+	color: #ff0000;
+	font-style: italic;
+	font-weight: bold;
+        }
+        </style>
     </head>
     <body>
         <form:form method="post" commandName="registerBean" action="/LoginApp/registration.html">
@@ -29,37 +33,34 @@
                 <tbody>
                     <tr>
                         <td>Register Id</td>
-                        <td><input type="text" name="registerId" value="" /></td>
+                        <td><input type="text" name="registerId" value="" />
+                            <form:errors path="registerId" cssClass="error"/></td>
                     </tr>
                     <tr>
                         <td>First Name</td>
-                        <td><input type="text" name="firstName" value="" /></td>
-                        <td><form:errors path="firstName" cssClass="error"/></td>
+                        <td><input type="text" name="firstName" value="" />
+                            <form:errors path="firstName" cssClass="error"/>
+                        </td>
                     </tr>
                     <tr>
                         <td>Last Name</td>
-                        <td><input type="text" name="lastName" value="" /></td>
-                        <td><form:errors path="lastName" cssClass="error"/></td>
+                        <td><input type="text" name="lastName" value="" /><form:errors path="lastName" cssClass="error"/></td>
                     </tr>
                     <tr>
                         <td>Email</td>
-                        <td><input type="text" name="email" value="" /></td>
-                        <td><form:errors path="email" cssClass="error"/></td>
+                        <td><input type="text" name="email" value="" /><form:errors path="email" cssClass="error"/></td>
                     </tr>
                     <tr>
                         <td>User Name</td>
-                        <td><input type="text" name="userName" value="" /></td>
-                        <td><form:errors path="userName" cssClass="error"/></td>
+                        <td><input type="text" name="userName" value="" /><form:errors path="userName" cssClass="error"/></td>
                     </tr>
                     <tr>
                         <td>Password</td>
-                        <td><input type="password" name="password" value="" /></td>
-                        <td><form:errors path="password" cssClass="error"/></td>
+                        <td><input type="password" name="password" value="" /><form:errors path="password" cssClass="error"/></td>
                     </tr>
                     <tr>
                         <td>Confirm Password</td>
-                        <td><input type="password" name="confirmPassword" value="" /></td>
-                        <td><form:errors path="confirmPassword" cssClass="error"/></td>
+                        <td><input type="password" name="confirmPassword" value="" /><form:errors path="confirmPassword" cssClass="error"/></td>
                     </tr>
                     <tr>
                         <td><input type="submit" value="Submit" /></td>
