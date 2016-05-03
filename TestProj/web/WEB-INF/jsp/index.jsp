@@ -26,7 +26,7 @@
                             </tr>
                             <tr>
                                         <td>
-                                             <form:form method="post" commandName="registerBean" action="/LoginApp/loginuser.html">
+                                             <form:form method="post"  commandName="registerBean" action="/LoginApp/loginuser.html">
                                             <input class="login"  type="text" placeholder="userName" id="un" autocomplete="off" name="userid"/>
                                         <td>
                             </tr>
