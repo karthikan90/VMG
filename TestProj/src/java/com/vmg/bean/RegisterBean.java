@@ -1,7 +1,7 @@
 package com.vmg.bean;
 
 /**
- * @author Dinesh Rajput
+ * @author Mohan Gandhi Vadapalli
  *
  */
 public class RegisterBean {
@@ -13,7 +13,7 @@ public class RegisterBean {
 	private String confirmPassword;
 	private int registerId;
         private String role;
-
+      
     public String getFirstName() {
         return firstName;
     }

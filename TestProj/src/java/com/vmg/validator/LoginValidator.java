@@ -27,15 +27,21 @@ public class LoginValidator implements Validator
  
     public void validate(Object target, Errors errors) 
     {
-        RegisterBean registerBean = (RegisterBean) target;
+        RegisterBean regBean = (RegisterBean) target;
+        if(!regBean.getPassword().equals(regBean.getConfirmPassword())){
+            errors.rejectValue("confirmPassword","notmatch.password");
+        }
         
-
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName", "error.firstName", "First name is required.");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastName", "error.lastName", "Last name is required.");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "userName", "error.userName", "user name is required.");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "error.password", "password is required.");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "confirmPassword", "error.confirmPassword", "confirmPassword is required.");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "error.email", "Email is required.");
+        if(regBean.getRegisterId() <=0){
+            errors.rejectValue("registerId", "negativeValue", new Object[]{"'registerId'"}, "Register Id can't be negative");
+        }
+//
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName", "firstName.required");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastName", "lastName.required");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "userName", "userName.required");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "password.required");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "confirmPassword", "confirmPassword.required");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "Email");
     }
  
 }
