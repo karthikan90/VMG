@@ -67,12 +67,12 @@ public class LoginController {
             
             HttpSession session = request.getSession(true);
             
-            //Validation code
-            loginValidator.validate(registerBean, result);
-            //Check validation errors
-                if (result.hasErrors()) {
-                    return new ModelAndView("redirect:index.html");
-                }
+//            //Validation code
+//            loginValidator.validate(registerBean, result);
+//            //Check validation errors
+//                if (result.hasErrors()) {
+//                    return new ModelAndView("redirect:index.html");
+//                }
             boolean isValidUser = registerService.isValidUser(userName, password,role);
             if (isValidUser) {
                 session.setAttribute("userid", userName);
