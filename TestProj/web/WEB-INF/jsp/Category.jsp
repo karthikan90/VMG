@@ -42,5 +42,8 @@
             </table>
             </center>
         </form:form>
+         <c:if test="${isExist == 'existed'}">
+                <h2><Center>${categoryAdded}</center></h2>
+        </c:if>
     </body>
 </html>

@@ -62,7 +62,7 @@ public class LoginController {
         
 	@RequestMapping(value = "/loginuser", method = RequestMethod.POST)
         public ModelAndView isValidUser(HttpServletRequest request, @ModelAttribute("registerBean") RegisterBean registerBean,
-            BindingResult result) {
+            final RedirectAttributes redirectAttributes) {
             String userName = registerBean.getUserName();
             String password = registerBean.getPassword();
             String role = registerBean.getRole();
@@ -82,8 +82,7 @@ public class LoginController {
                 request.setAttribute("loggedInUser", registerBean.getUserName());
                 return new ModelAndView("loginsuccess");
             } else {
-                request.setAttribute("message", "Invalid credentials!!");
-                session.setAttribute("userid", null);
+                redirectAttributes.addFlashAttribute("message","invalid");
                 return new ModelAndView("redirect:/index.html");
             }
 
@@ -117,13 +116,13 @@ public class LoginController {
         
         @RequestMapping(value = "/saveCategory", method = RequestMethod.POST)
 	public ModelAndView savecategory(HttpServletRequest request,@ModelAttribute("categoryBean") CategoryBean categoryBean,
-            BindingResult result) {
+            final RedirectAttributes redirectAttributes) {
              ProjectHelper projectHelper = new ProjectHelper();
                 
              HttpSession session = request.getSession(true);
                 if(categoryService.isExistCategory(categoryBean.getCategoryName())){
-                    System.out.println("category name already exist");
-                    session.setAttribute("check", true);
+                     redirectAttributes.addFlashAttribute("isExist","existed");
+                     redirectAttributes.addFlashAttribute("categoryAdded","Category Already Existed.. Please Enter Some Other One ");
                     return new ModelAndView("redirect:/Category.html");
                 }else{
                     Category category = projectHelper.prepareModelForCategory(categoryBean);

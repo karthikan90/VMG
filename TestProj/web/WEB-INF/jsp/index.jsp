@@ -23,12 +23,7 @@
                 </div> 
             </center>
         </div>
-       
-        <c:if test="${requestScope.userName == 'invalid'}">
-                <h2><Center>Please Enter Valid Credentials</center></h2>
-        </c:if>
-       
-        
+      
        
         <div id="login_container">
             <table align="center" id="table1" cellspacing="5">
@@ -64,5 +59,9 @@
                 </form:form>
             </table>   
         </div>
+         <br>
+        <c:if test="${message == 'invalid'}">
+                <h2><Center>Please Enter Valid Credentials</center></h2>
+        </c:if>
     </body>
 </html>
