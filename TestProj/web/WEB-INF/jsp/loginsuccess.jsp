@@ -11,23 +11,14 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title> Page</title>
     </head>
     <body>
-        <%
-            if ((session.getAttribute("userid") == null) || (session.getAttribute("userid") == "")) {
-        %>
-        You are not logged in<br/>
-        <a href="index.html">Please Login</a>
-        <%} else {
-        %>
         <h1>Welcome <%=session.getAttribute("userid")%></h1><br/>
-        <a href='Category.html'>Categories</a>
-        <a href='subcategory.html'>Sub-categories</a>
-        <a href='product.html'>Products</a>
-        <a href='logout.html'>Log out</a>
-        <%
-            }
-        %>
+        <a href='Category.html'>Categories</a><br><br>
+        <a href='subcategory.html'>Sub-categories</a><br><br>
+        <a href='product.html'>Products</a><br><br>
+        <a href='logout.html'>Log out</a><br><br>
+       
     </body>
 </html>
