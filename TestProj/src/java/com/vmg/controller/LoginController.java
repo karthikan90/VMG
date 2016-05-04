@@ -106,8 +106,7 @@ public class LoginController {
         @RequestMapping(value = "/Category", method = RequestMethod.GET)
 	public ModelAndView categoryPage(HttpServletRequest request,@ModelAttribute("categoryBean") CategoryBean categoryBean,
             BindingResult result) {
-            String id = request.getParameter("id");
-            ProjectHelper projectHelper  = new ProjectHelper();
+                ProjectHelper projectHelper  = new ProjectHelper();
                 Map<String, Object> model = new HashMap<String, Object>();
                 List<CategoryBean> categoryList = projectHelper.prepareListofBeanForCategory(categoryService.getAllCategories());
 		model.put("categories",  categoryList);
@@ -125,7 +124,11 @@ public class LoginController {
         
         @RequestMapping(value = "/subcategory", method = RequestMethod.GET)
 	public ModelAndView subCategoryPage() {
-		return new ModelAndView("subcategory");
+                ProjectHelper projectHelper  = new ProjectHelper();
+                Map<String, Object> model = new HashMap<String, Object>();
+                List<CategoryBean> categoryList = projectHelper.prepareListofBeanForCategory(categoryService.getAllCategories());
+		model.put("categories",  categoryList);
+		return new ModelAndView("subcategory",model);
         }
         
         @RequestMapping(value = "/product", method = RequestMethod.GET)
