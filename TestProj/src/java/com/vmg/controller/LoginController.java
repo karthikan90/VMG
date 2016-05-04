@@ -24,6 +24,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  * @author Dinesh Rajput
@@ -82,7 +84,7 @@ public class LoginController {
             } else {
                 request.setAttribute("message", "Invalid credentials!!");
                 session.setAttribute("userid", null);
-                return new ModelAndView("loginsuccess");
+                return new ModelAndView("redirect:/index.html");
             }
 
     }
@@ -117,9 +119,17 @@ public class LoginController {
 	public ModelAndView savecategory(HttpServletRequest request,@ModelAttribute("categoryBean") CategoryBean categoryBean,
             BindingResult result) {
              ProjectHelper projectHelper = new ProjectHelper();
-                Category category = projectHelper.prepareModelForCategory(categoryBean);
-                categoryService.addCategory(category);
-                return new ModelAndView("redirect:/Category.html");
+                
+             HttpSession session = request.getSession(true);
+                if(categoryService.isExistCategory(categoryBean.getCategoryName())){
+                    System.out.println("category name already exist");
+                    session.setAttribute("check", true);
+                    return new ModelAndView("redirect:/Category.html");
+                }else{
+                    Category category = projectHelper.prepareModelForCategory(categoryBean);
+                    categoryService.addCategory(category);
+                    return new ModelAndView("redirect:/Category.html");
+                }
         }
         
         @RequestMapping(value = "/subcategory", method = RequestMethod.GET)

@@ -35,5 +35,11 @@ public class CategoryServiceImpl implements CategoryService{
     public void addCategory(Category category) {
         categoryDao.addCategory(category);
     }
+
+    @Override
+    @Transactional
+    public boolean isExistCategory(String categoryName) {
+        return categoryDao.isExistCategory(categoryName);
+    }
     
 }

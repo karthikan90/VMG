@@ -18,4 +18,6 @@ public interface CategoryService {
     
     public void addCategory(Category category);
     
+    public boolean isExistCategory(String categoryName);
+    
 }
