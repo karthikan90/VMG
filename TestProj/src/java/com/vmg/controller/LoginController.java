@@ -17,14 +17,19 @@ import com.vmg.model.Register;
 import com.vmg.service.CategoryService;
 import com.vmg.service.RegisterService;
 import com.vmg.validator.LoginValidator;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
@@ -68,13 +73,7 @@ public class LoginController {
             String role = registerBean.getRole();
             
             HttpSession session = request.getSession(true);
-            
-//            //Validation code
-//            loginValidator.validate(registerBean, result);
-//            //Check validation errors
-//                if (result.hasErrors()) {
-//                    return new ModelAndView("redirect:index.html");
-//                }
+        
             boolean isValidUser = registerService.isValidUser(userName, password,role);
             if (isValidUser) {
                 session.setAttribute("userid", userName);
@@ -138,6 +137,28 @@ public class LoginController {
                 List<CategoryBean> categoryList = projectHelper.prepareListofBeanForCategory(categoryService.getAllCategories());
 		model.put("categories",  categoryList);
 		return new ModelAndView("subcategory",model);
+        }
+        
+        @RequestMapping(value = "/saveSubCategories", method = RequestMethod.GET)
+	public ModelAndView saveSubCategories(@RequestParam("categories") String[] categories,@RequestParam("category") String category) {
+            
+            
+            try{
+                JSONArray jsonArray = new JSONArray(categories);
+                System.out.println(" "+jsonArray.length());
+             for(int i = 0;i < jsonArray.length() ; i++){
+                 JSONObject object = jsonArray.getJSONObject(i);
+                  System.out.println(" "+object.get(category+"1"));
+                  System.out.println(" "+object.get(category+"2"));
+                  System.out.println(" "+object.get(category+"3"));
+            }
+            }catch(Exception exception){
+                System.out.println(" "+exception.getMessage());
+            }
+                System.out.println(""+category);
+                ModelAndView modelAndView = new ModelAndView("success");
+                modelAndView.addObject("response", "Your data has been saved successfully");
+		return  modelAndView;
         }
         
         @RequestMapping(value = "/product", method = RequestMethod.GET)
