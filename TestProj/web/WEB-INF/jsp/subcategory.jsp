@@ -23,18 +23,21 @@
         </select>   
         <script>
             var app = angular.module("subCategoryList", []);
-            app.controller("myCtrl", function ($scope) {
+            var arr = [];
+            app.controller("myCtrl", function ($scope,$http) {
                 $scope.products = [];
+               
                 $scope.addItem = function () {
                     $scope.errortext = "";
                     if (!$scope.addMe) {
                         return;
                     }
-                    if($scope.addMe == ""){
+                    if($scope.addMe == "" && $scope.addMe == undefined){
                         $scope.errortext = "Please enter item to add Category";
                         return;
                     }
                     if ($scope.products.indexOf($scope.addMe) == -1) {
+                         
                         $scope.products.push($scope.addMe);
                         $scope.addMe = "";
                     } else {
@@ -45,13 +48,25 @@
                 $scope.removeItem = function (x) {
                      $scope.errortext = "";
                     $scope.products.splice(x, 1);
-                    document.getElementById("add").value = "";
                 }
-                $scope.list = function () {
-                   console.log($scope.products);
+                $scope.saveData = function () {
+                   var temp = $scope.products;
                    var e = document.getElementById("category");
-                    var strUser = e.options[e.selectedIndex].value;
-                   console.log(strUser);
+                   var category = e.options[e.selectedIndex].value;
+                    
+                    var  obj = {} , i = 0;
+                   for(var t in temp){
+                       obj[category+i] =  temp[t]; 
+                         i++;
+                   }
+                   arr.push(obj);
+                    console.log(arr);
+                   console.log(arr.length);
+                   var url = "/LoginApp/saveSubCategories.html?category="+category+"&categories="+arr;
+                    $http.get(url).success( function(response) {
+                       console.log(response); 
+                       $scope.Data = response;
+                    });
                 }
                 
             });
@@ -59,15 +74,14 @@
 
         <div ng-app="subCategoryList" ng-controller="myCtrl">
             <ul>
-                <li ng-repeat="x in products">{{x}}<span ng-click="removeItem($index)">        ×</span></li>
+                <li ng-repeat="x in products">{{x}}<span ng-click="removeItem($index)"  style="cursor:pointer;">        ×</span></li>
             </ul>
             <input ng-model="addMe" id="add">
             <button ng-click="addItem()">Add</button>
-            <button ng-click="list()">Submit</button><br>
-            <p>{{errortext}}</p>
+            <button ng-click="saveData()">Submit</button><br>
+            <p><b>{{errortext}}</b></p>
+            <p><b>{{Data}}</b></p>
         </div>
-
-       
 
         <p><b>Write in the input field to add items.</b></p>
         <p><b>Click the little x to remove an item from the shopping list.</b></p>
