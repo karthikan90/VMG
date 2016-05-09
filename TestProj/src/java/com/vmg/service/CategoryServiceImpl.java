@@ -7,6 +7,7 @@ package com.vmg.service;
 
 import com.vmg.dao.CategoryDao;
 import com.vmg.model.Category;
+import com.vmg.model.SubCategory;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,12 @@ public class CategoryServiceImpl implements CategoryService{
     @Transactional
     public boolean isExistCategory(String categoryName) {
         return categoryDao.isExistCategory(categoryName);
+    }
+    
+    @Override
+    @Transactional
+    public void addSubCategory(SubCategory subCategory) {
+        categoryDao.addSubCategory(subCategory);
     }
     
 }

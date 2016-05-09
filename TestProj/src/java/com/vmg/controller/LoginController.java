@@ -14,11 +14,12 @@ import com.vmg.bean.RegisterBean;
 import com.vmg.helper.ProjectHelper;
 import com.vmg.model.Category;
 import com.vmg.model.Register;
+import com.vmg.model.SubCategory;
 import com.vmg.service.CategoryService;
 import com.vmg.service.RegisterService;
 import com.vmg.validator.LoginValidator;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -140,22 +141,22 @@ public class LoginController {
         }
         
         @RequestMapping(value = "/saveSubCategories", method = RequestMethod.GET)
-	public ModelAndView saveSubCategories(@RequestParam("categories") String[] categories,@RequestParam("category") String category) {
+	public ModelAndView saveSubCategories(@RequestParam("categories") String categories,@RequestParam("category") String category) {
             
-            
+            SubCategory subCategory = new SubCategory();
             try{
-                JSONArray jsonArray = new JSONArray(categories);
-                System.out.println(" "+jsonArray.length());
-             for(int i = 0;i < jsonArray.length() ; i++){
-                 JSONObject object = jsonArray.getJSONObject(i);
-                  System.out.println(" "+object.get(category+"1"));
-                  System.out.println(" "+object.get(category+"2"));
-                  System.out.println(" "+object.get(category+"3"));
-            }
+                String jsonString = categories;
+                JSONObject jsonResult = new JSONObject(jsonString);
+                JSONArray data = jsonResult.getJSONArray(category);
+                for(int i = 0 ; i < data.length() ; i++) {
+                    subCategory.setSubCategoryName(data.getString(i));
+                    subCategory.setCategoryId(Integer.parseInt(category));
+                    categoryService.addSubCategory(subCategory);
+                     System.out.println(""+data.getString(i));
+                 }
             }catch(Exception exception){
                 System.out.println(" "+exception.getMessage());
             }
-                System.out.println(""+category);
                 ModelAndView modelAndView = new ModelAndView("success");
                 modelAndView.addObject("response", "Your data has been saved successfully");
 		return  modelAndView;

@@ -6,6 +6,7 @@
 package com.vmg.service;
 
 import com.vmg.model.Category;
+import com.vmg.model.SubCategory;
 import java.util.List;
 
 /**
@@ -19,5 +20,7 @@ public interface CategoryService {
     public void addCategory(Category category);
     
     public boolean isExistCategory(String categoryName);
+    
+    public void addSubCategory(SubCategory subCategory);
     
 }

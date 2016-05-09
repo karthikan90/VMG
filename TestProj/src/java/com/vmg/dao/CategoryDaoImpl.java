@@ -5,8 +5,9 @@
  */
 package com.vmg.dao;
 
-import com.vmg.helper.PasswordEncryptHelper;
 import com.vmg.model.Category;
+import com.vmg.model.SubCategory;
+import java.io.Serializable;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -32,7 +33,7 @@ public class CategoryDaoImpl implements CategoryDao{
     @Override
     public void addCategory(Category category) {
             System.out.println("category "+category);
-           sessionFactory.getCurrentSession().save(category); 
+        Serializable save = sessionFactory.getCurrentSession().save(category); 
     }
 
     @Override
@@ -43,6 +44,12 @@ public class CategoryDaoImpl implements CategoryDao{
         Query query = session.createQuery(SQL_QUERY);
         query.setParameter(0, categoryName);
         return query.list().size() > 0 ? true : false;
+    }
+
+    @Override
+    public void addSubCategory(SubCategory subCategory) {
+          System.out.println("category "+subCategory);
+           sessionFactory.getCurrentSession().save(subCategory); 
     }
     
 }

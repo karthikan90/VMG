@@ -6,6 +6,7 @@
 package com.vmg.dao;
 
 import com.vmg.model.Category;
+import com.vmg.model.SubCategory;
 import java.util.List;
 
 /**
@@ -20,4 +21,5 @@ public interface CategoryDao {
     
     public boolean isExistCategory(String categoryName);
     
+    public void addSubCategory(SubCategory subCategory);
 }
