@@ -18,12 +18,11 @@
         <jsp:include page="loginsuccess.jsp" flush="true" />
         <select name="categoryList" id="category">
             <c:forEach items="${categories}" var="category">
-                <option value="${category.categoryName}"><c:out value="${category.categoryName}"/></option>
+                <option value="${category.categoryId}"><c:out value="${category.categoryName}"/></option>
             </c:forEach>
         </select>   
         <script>
             var app = angular.module("subCategoryList", []);
-            var arr = [];
             app.controller("myCtrl", function ($scope,$http) {
                 $scope.products = [];
                
@@ -53,16 +52,31 @@
                    var temp = $scope.products;
                    var e = document.getElementById("category");
                    var category = e.options[e.selectedIndex].value;
-                    
-                    var  obj = {} , i = 0;
-                   for(var t in temp){
-                       obj[category+i] =  temp[t]; 
-                         i++;
-                   }
-                   arr.push(obj);
-                    console.log(arr);
-                   console.log(arr.length);
-                   var url = "/LoginApp/saveSubCategories.html?category="+category+"&categories="+arr;
+                    var  obj = {} ;
+                       obj[category] =  temp; 
+                   console.log(obj);
+                   var temp1 = [{ "Category" : "Clothing",
+                                   "SubCategory" : "Jeans",
+                                       "list" : 
+                                       {
+                                       "brand":"levis",
+                                       "price":"2500",
+                                       "Quantity": "10",
+                                       "Measurement" : "Sizes"
+                                       }
+
+                                },
+                                { "Category" : "Electronics",
+                                   "SubCategory" : "Tvs",
+                                       "list" : 
+                                       {
+                                       "brand":"Sony",
+                                       "price":"45000",
+                                       "Quantity": "10",
+                                       "Measurement" : "Inches"
+                                       }
+                                }];
+                   var url = "/LoginApp/saveSubCategories.html?category="+category+"&categories="+JSON.stringify(obj)+"&temp="+encodeURIComponent(JSON.stringify(temp1));
                     $http.get(url).success( function(response) {
                        console.log(response); 
                        $scope.Data = response;
