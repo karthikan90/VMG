@@ -18,6 +18,7 @@ import com.vmg.model.SubCategory;
 import com.vmg.service.CategoryService;
 import com.vmg.service.RegisterService;
 import com.vmg.validator.LoginValidator;
+import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -25,8 +26,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ui.Model;
@@ -141,10 +142,37 @@ public class LoginController {
         }
         
         @RequestMapping(value = "/saveSubCategories", method = RequestMethod.GET)
-	public ModelAndView saveSubCategories(@RequestParam("categories") String categories,@RequestParam("category") String category) {
+	public ModelAndView saveSubCategories(@RequestParam("categories") String categories,@RequestParam("category") String category,@RequestParam("temp") String temp1) {
             
             SubCategory subCategory = new SubCategory();
+            
+            JSONParser parser = new JSONParser();
+            System.out.println(" === "+temp1);
             try{
+                
+                org.json.simple.JSONArray a = (org.json.simple.JSONArray) parser.parse(temp1);
+
+            for (Object o : a) {
+                org.json.simple.JSONObject jsonObject = (org.json.simple.JSONObject) o;
+
+                String name = (String) jsonObject.get("Category");
+                System.out.println(name);
+
+                String city = (String) jsonObject.get("SubCategory");
+                System.out.println(city);
+                
+                org.json.simple.JSONObject list = (org.json.simple.JSONObject) jsonObject.get("list");
+                    String brand = (String) list.get("brand");
+                    System.out.println(brand);
+                    String price = (String) list.get("price");
+                    System.out.println(price);
+                    String quantity = (String) list.get("Quantity");
+                    System.out.println(quantity);
+                    String measurement = (String) list.get("Measurement");
+                    System.out.println(measurement);
+                    System.out.println("===============================================");
+            }
+                
                 String jsonString = categories;
                 JSONObject jsonResult = new JSONObject(jsonString);
                 JSONArray data = jsonResult.getJSONArray(category);
