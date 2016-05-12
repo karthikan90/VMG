@@ -19,9 +19,10 @@
             app.controller("myCtrl", function ($scope,$http) {
                 $scope.getSubCategoryList = function (selected) {
                     var url = "/LoginApp/getSubCategories.html?categoryId="+selected;
-                    $http.get(url).success( function(response) {
-                       console.log(response); 
-//                       $scope.Data = response;
+                    $http.get(url).success( function(data,status,response) {
+                        $scope.getSubList = data;
+                        console.log(data);
+                        console.log(status);
                     });
                 }
                 
@@ -30,6 +31,7 @@
             
     <body>
         <jsp:include page="loginsuccess.jsp" flush="true" />
+        <div ng-app="subCategoryList" ng-controller="myCtrl">
         <form:form method="post" commandName="categoryBean" action="/LoginApp/saveCategory.html">
             <center>
             <table border="1" width="30%" cellpadding="3">
@@ -39,31 +41,23 @@
                         <tr>
                             <td>Category List</td>
                             <td>
-                                <div ng-app="subCategoryList" ng-controller="myCtrl">
+                                
                                     <select name="categoryList" id="role" ng-model="selected" ng-change="getSubCategoryList(selected)">
                                         <option value="">Select category</option>
                                     <c:forEach items="${categories}" var="category">
                                         <option value="${category.categoryId}"><c:out value="${category.categoryName}"/></option>
                                     </c:forEach>
                                 </select> 
-                                </div>
-                                  
                             </td>
                         </tr> 
                     </c:if>
-                    <c:if test="${!empty products}">
                         <tr>
                             <td>Product List</td>
                             <td>
-                                <select name="categoryList" id="categoryList">
-                                    <c:forEach items="${products}" var="product">
-                                        <option value="">Select Sub-Category</option>
-                                        <option value="${product.productName}"><c:out value="${product.productName}"/></option>
-                                    </c:forEach>
-                                </select>   
+                                    <select ng-model="getSubList" ng-options="subCat.subCategoryName for subCat in getSubList track by subCat.id">
+                                    </select>
                             </td>
                         </tr> 
-                    </c:if>
                     <tr>
                         <td>Product Name</td>
                         <td><input type="text" name="productName" value="" /></td>
@@ -97,5 +91,6 @@
             </table>
             </center>
         </form:form>
+        </div>
     </body>
 </html>

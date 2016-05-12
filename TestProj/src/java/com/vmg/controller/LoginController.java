@@ -1,6 +1,7 @@
 package com.vmg.controller;
 
 
+import com.google.gson.Gson;
 import com.vmg.bean.CategoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -202,14 +203,24 @@ public class LoginController {
         @RequestMapping(value = "/getSubCategories", method = RequestMethod.GET)
 	public ModelAndView getSubCategories(@RequestParam("categoryId") int categoryId) {
             System.out.println("id is "+categoryId);
-                if(categoryId == 3){
+             
                 List<SubCategory> allSubCategories = categoryService.getAllSubCategories(categoryId);
-                    System.out.println("== >>> "+allSubCategories);
+                ModelAndView modelAndView = null;
+                
+                // create a new Gson instance
+                Gson gson = new Gson();
+                //o convert your list to json
+                if(allSubCategories.size() > 0){
+                    String jsonSubCategoriesList = gson.toJson(allSubCategories);
+                    modelAndView = new ModelAndView("success");
+                    modelAndView.addObject("response", jsonSubCategoriesList);
+                }else{
+                    modelAndView = new ModelAndView("success");
+                    modelAndView.addObject("response", "No data has Displayed");
                 }
-                    ModelAndView modelAndView = new ModelAndView("success");
-                    modelAndView.addObject("response", categoryId);
-                    return  modelAndView;
-               
+                
+
+                return  modelAndView;
         }
         
 }
