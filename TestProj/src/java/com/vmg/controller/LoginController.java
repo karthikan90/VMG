@@ -192,7 +192,24 @@ public class LoginController {
         
         @RequestMapping(value = "/product", method = RequestMethod.GET)
 	public ModelAndView productPage() {
-		return new ModelAndView("product");
+                ProjectHelper projectHelper  = new ProjectHelper();
+                Map<String, Object> model = new HashMap<String, Object>();
+                List<CategoryBean> categoryList = projectHelper.prepareListofBeanForCategory(categoryService.getAllCategories());
+		model.put("categories",  categoryList);
+		return new ModelAndView("product",model);
+        }
+        
+        @RequestMapping(value = "/getSubCategories", method = RequestMethod.GET)
+	public ModelAndView getSubCategories(@RequestParam("categoryId") int categoryId) {
+            System.out.println("id is "+categoryId);
+                if(categoryId == 3){
+                List<SubCategory> allSubCategories = categoryService.getAllSubCategories(categoryId);
+                    System.out.println("== >>> "+allSubCategories);
+                }
+                    ModelAndView modelAndView = new ModelAndView("success");
+                    modelAndView.addObject("response", categoryId);
+                    return  modelAndView;
+               
         }
         
 }

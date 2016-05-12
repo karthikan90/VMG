@@ -8,10 +8,13 @@ package com.vmg.dao;
 import com.vmg.model.Category;
 import com.vmg.model.SubCategory;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.List;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -28,6 +31,13 @@ public class CategoryDaoImpl implements CategoryDao{
     @Override
     public List<Category> getAllCategories() {
         return (List<Category>) sessionFactory.getCurrentSession().createCriteria(Category.class).list();
+    }
+    
+    @Override
+    public List<SubCategory> getAllSubCategories(int categoryId) {
+        Criteria createCriteria = sessionFactory.getCurrentSession().createCriteria(SubCategory.class);
+        createCriteria.add(Restrictions.eq("categoryId",categoryId));
+        return (List<SubCategory>) createCriteria.list();
     }
 
     @Override
@@ -48,8 +58,13 @@ public class CategoryDaoImpl implements CategoryDao{
 
     @Override
     public void addSubCategory(SubCategory subCategory) {
-          System.out.println("category "+subCategory);
-           sessionFactory.getCurrentSession().save(subCategory); 
+          System.out.println("category is "+subCategory);
+          try{
+              sessionFactory.getCurrentSession().save(subCategory); 
+          }catch(Exception sqe){
+              sqe.printStackTrace();
+          }
+           
     }
     
 }

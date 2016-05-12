@@ -17,6 +17,8 @@ public interface CategoryDao {
     
     public List<Category> getAllCategories();
     
+    public List<SubCategory> getAllSubCategories(int id);
+    
     public void addCategory(Category category);
     
     public boolean isExistCategory(String categoryName);

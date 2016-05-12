@@ -48,5 +48,11 @@ public class CategoryServiceImpl implements CategoryService{
     public void addSubCategory(SubCategory subCategory) {
         categoryDao.addSubCategory(subCategory);
     }
+
+    @Override
+    @Transactional
+    public List<SubCategory> getAllSubCategories(int id) {
+        return categoryDao.getAllSubCategories(id);
+    }
     
 }
