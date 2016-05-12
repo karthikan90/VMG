@@ -6,6 +6,7 @@
 package com.vmg.dao;
 
 import com.vmg.model.Category;
+import com.vmg.model.Product;
 import com.vmg.model.SubCategory;
 import java.io.Serializable;
 import java.sql.SQLException;
@@ -65,6 +66,14 @@ public class CategoryDaoImpl implements CategoryDao{
               sqe.printStackTrace();
           }
            
+    }
+
+    @Override
+    public void saveProductList(List<Product> productList) {
+        System.out.println(" "+productList);
+        for(Product product : productList){
+            Serializable save = sessionFactory.getCurrentSession().save(product);
+        }
     }
     
 }

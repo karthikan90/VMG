@@ -7,6 +7,7 @@ package com.vmg.service;
 
 import com.vmg.dao.CategoryDao;
 import com.vmg.model.Category;
+import com.vmg.model.Product;
 import com.vmg.model.SubCategory;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,12 @@ public class CategoryServiceImpl implements CategoryService{
     @Transactional
     public void addSubCategory(SubCategory subCategory) {
         categoryDao.addSubCategory(subCategory);
+    }
+    
+    @Override
+    @Transactional
+    public void saveProductList(List<Product> productList) {
+        categoryDao.saveProductList(productList);
     }
 
     @Override

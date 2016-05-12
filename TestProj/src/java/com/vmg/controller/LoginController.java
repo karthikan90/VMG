@@ -12,26 +12,26 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.vmg.bean.RegisterBean;
+import com.vmg.helper.ProductList;
 import com.vmg.helper.ProjectHelper;
 import com.vmg.model.Category;
+import com.vmg.model.Product;
 import com.vmg.model.Register;
 import com.vmg.model.SubCategory;
 import com.vmg.service.CategoryService;
 import com.vmg.service.RegisterService;
 import com.vmg.validator.LoginValidator;
-import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.ui.Model;
+import org.json.simple.parser.ParseException;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -143,37 +143,11 @@ public class LoginController {
         }
         
         @RequestMapping(value = "/saveSubCategories", method = RequestMethod.GET)
-	public ModelAndView saveSubCategories(@RequestParam("categories") String categories,@RequestParam("category") String category,@RequestParam("temp") String temp1) {
+	public ModelAndView saveSubCategories(@RequestParam("categories") String categories,@RequestParam("category") String category) {
             
             SubCategory subCategory = new SubCategory();
             
-            JSONParser parser = new JSONParser();
-            System.out.println(" === "+temp1);
             try{
-                
-                org.json.simple.JSONArray a = (org.json.simple.JSONArray) parser.parse(temp1);
-
-            for (Object o : a) {
-                org.json.simple.JSONObject jsonObject = (org.json.simple.JSONObject) o;
-
-                String name = (String) jsonObject.get("Category");
-                System.out.println(name);
-
-                String city = (String) jsonObject.get("SubCategory");
-                System.out.println(city);
-                
-                org.json.simple.JSONObject list = (org.json.simple.JSONObject) jsonObject.get("list");
-                    String brand = (String) list.get("brand");
-                    System.out.println(brand);
-                    String price = (String) list.get("price");
-                    System.out.println(price);
-                    String quantity = (String) list.get("Quantity");
-                    System.out.println(quantity);
-                    String measurement = (String) list.get("Measurement");
-                    System.out.println(measurement);
-                    System.out.println("===============================================");
-            }
-                
                 String jsonString = categories;
                 JSONObject jsonResult = new JSONObject(jsonString);
                 JSONArray data = jsonResult.getJSONArray(category);
@@ -183,7 +157,64 @@ public class LoginController {
                     categoryService.addSubCategory(subCategory);
                      System.out.println(""+data.getString(i));
                  }
-            }catch(Exception exception){
+            }catch(JSONException | NumberFormatException exception){
+                System.out.println(" "+exception.getMessage());
+            }
+                ModelAndView modelAndView = new ModelAndView("success");
+                modelAndView.addObject("response", "Your data has been saved successfully");
+		return  modelAndView;
+        }
+        
+        
+        @RequestMapping(value = "/saveProductDetails", method = RequestMethod.GET)
+	public ModelAndView saveProductDetails(@RequestParam("productsList") String productsList)  {
+            
+           Product product = null;
+           
+           List<Product> productList = new ArrayList<>();
+           
+            JSONParser parser = new JSONParser();
+           
+            try{
+                
+                org.json.simple.JSONArray a = (org.json.simple.JSONArray) parser.parse(productsList);
+                
+                for (Object o : a) {
+                    
+                product= new Product();
+                
+                org.json.simple.JSONObject jsonObject = (org.json.simple.JSONObject) o;
+             
+                String productName = (String) jsonObject.get("productName");
+                product.setProductName(productName);
+
+                String productBrand = (String) jsonObject.get("productBrand");
+                product.setProductBrand(productBrand);
+                
+                String productPrice = (String) jsonObject.get("productPrice");
+                product.setProductPrice(Integer.parseInt(productPrice));
+                
+                String productQuantity = (String) jsonObject.get("productQuantity");
+                product.setProductQuantity(Integer.parseInt(productQuantity));
+                
+                String measurement = (String) jsonObject.get("measurement");
+                product.setProductMeasurement(measurement);
+                
+                String catId = (String) jsonObject.get("catId");
+                product.setProductQuantity(Integer.parseInt(catId.trim()));
+                
+                String subCatId = (String) jsonObject.get("subCatId");
+                product.setProductQuantity(Integer.parseInt(subCatId.trim()));
+                
+                productList.add(product);
+                
+            }
+                System.out.println("==============================================="+productList);
+                
+                if(productList.size() > 0){
+                    categoryService.saveProductList(productList);
+                }
+            }catch(ParseException exception){
                 System.out.println(" "+exception.getMessage());
             }
                 ModelAndView modelAndView = new ModelAndView("success");
@@ -218,9 +249,9 @@ public class LoginController {
                     modelAndView = new ModelAndView("success");
                     modelAndView.addObject("response", "No data has Displayed");
                 }
-                
-
                 return  modelAndView;
         }
+        
+        
         
 }
