@@ -23,20 +23,20 @@
         </select>   
         <script>
             var app = angular.module("subCategoryList", []);
-            app.controller("myCtrl", function ($scope,$http) {
+            app.controller("myController", function ($scope, $http) {
                 $scope.products = [];
-               
+
                 $scope.addItem = function () {
                     $scope.errortext = "";
                     if (!$scope.addMe) {
                         return;
                     }
-                    if($scope.addMe == "" && $scope.addMe == undefined){
+                    if ($scope.addMe == "" && $scope.addMe == undefined) {
                         $scope.errortext = "Please enter item to add Category";
                         return;
                     }
                     if ($scope.products.indexOf($scope.addMe) == -1) {
-                         
+
                         $scope.products.push($scope.addMe);
                         $scope.addMe = "";
                     } else {
@@ -45,48 +45,29 @@
                     }
                 }
                 $scope.removeItem = function (x) {
-                     $scope.errortext = "";
+                    $scope.errortext = "";
                     $scope.products.splice(x, 1);
                 }
                 $scope.saveData = function () {
-                   var temp = $scope.products;
-                   var e = document.getElementById("category");
-                   var category = e.options[e.selectedIndex].value;
-                    var  obj = {} ;
-                       obj[category] =  temp; 
-                   console.log(obj);
-                   var temp1 = [{ "Category" : "Clothing",
-                                   "SubCategory" : "Jeans",
-                                       "list" : 
-                                       {
-                                       "brand":"levis",
-                                       "price":"2500",
-                                       "Quantity": "10",
-                                       "Measurement" : "Sizes"
-                                       }
+                    var temp = $scope.products;
+                    var e = document.getElementById("category");
+                    var category = e.options[e.selectedIndex].value;
+                    var obj = {};
+                    obj[category] = temp;
+                    console.log(obj);
+                   
+                    var url = "/LoginApp/saveSubCategories.html?category=" + category + "&categories=" + JSON.stringify(obj);
+                    $http.get(url).success(function (response) {
+                        console.log(response);
+                        $scope.Data = response;
 
-                                },
-                                { "Category" : "Electronics",
-                                   "SubCategory" : "Tvs",
-                                       "list" : 
-                                       {
-                                       "brand":"Sony",
-                                       "price":"45000",
-                                       "Quantity": "10",
-                                       "Measurement" : "Inches"
-                                       }
-                                }];
-                   var url = "/LoginApp/saveSubCategories.html?category="+category+"&categories="+JSON.stringify(obj)+"&temp="+encodeURIComponent(JSON.stringify(temp1));
-                    $http.get(url).success( function(response) {
-                       console.log(response); 
-                       $scope.Data = response;
                     });
                 }
-                
+
             });
         </script>
 
-        <div ng-app="subCategoryList" ng-controller="myCtrl">
+        <div ng-app="subCategoryList" ng-controller="myController">
             <ul>
                 <li ng-repeat="x in products">{{x}}<span ng-click="removeItem($index)"  style="cursor:pointer;">        ×</span></li>
             </ul>
@@ -99,6 +80,6 @@
 
         <p><b>Write in the input field to add items.</b></p>
         <p><b>Click the little x to remove an item from the shopping list.</b></p>
-        
+
     </body>
 </html>
