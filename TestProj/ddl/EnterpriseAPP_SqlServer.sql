@@ -19,3 +19,5 @@ create table SubCategory(
   INSERT INTO [dbo].[Category] ([category_name]) VALUES ('Electronics')
   INSERT INTO [dbo].[Category] ([category_name]) VALUES ('Home Appliances')
   INSERT INTO [dbo].[Category] ([category_name]) VALUES ('Clothing')
+
+create table Products(id int primary key identity,product_name varchar(100),product_brand varchar(50),product_price int,product_quantity int,product_measurement varchar(50),fk_subcat_id int references SubCategory(sub_category_id),fk_cat_id int references Category(category_id));
