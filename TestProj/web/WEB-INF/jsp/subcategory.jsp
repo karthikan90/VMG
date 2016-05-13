@@ -16,30 +16,42 @@
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
     <body>
         <jsp:include page="loginsuccess.jsp" flush="true" />
-        <select name="categoryList" id="category">
-            <c:forEach items="${categories}" var="category">
-                <option value="${category.categoryId}"><c:out value="${category.categoryName}"/></option>
-            </c:forEach>
-        </select>   
+          
         <script>
             var app = angular.module("subCategoryList", []);
             app.controller("myController", function ($scope, $http) {
-                $scope.products = [];
-
+                
+                var jsonArray  = new Array();
+                var jsonObj = {};
+                $scope.removeList = function(){
+                     $scope.products = [];
+                }
                 $scope.addItem = function () {
+                   var flag = false;
+                   
                     $scope.errortext = "";
                     if (!$scope.addMe) {
-                        return;
-                    }
-                    if ($scope.addMe == "" && $scope.addMe == undefined) {
                         $scope.errortext = "Please enter item to add Category";
                         return;
                     }
                     if ($scope.products.indexOf($scope.addMe) == -1) {
-
+                        
+                        for(var i=0 ; i < jsonArray.length ; i++){
+                          if(jsonArray[i].catId == $scope.selectedCategory){
+                            jsonArray[i].catNames.push($scope.addMe);
+                            flag = true;
+                          }
+                        }
+                        if(!flag){
+                            
+                            jsonObj = {'catId':$scope.selectedCategory,'catNames':[$scope.addMe]};;
+                            jsonArray.push(jsonObj);
+                        }
+                        
                         $scope.products.push($scope.addMe);
                         $scope.addMe = "";
                     } else {
+                        console.log("in else "+$scope.addMe);
                         $scope.errortext = "The item is already in your shopping list.";
                         $scope.addMe = "";
                     }
@@ -54,9 +66,9 @@
                     var category = e.options[e.selectedIndex].value;
                     var obj = {};
                     obj[category] = temp;
-                    console.log(obj);
+                    console.log(jsonArray);
                    
-                    var url = "/LoginApp/saveSubCategories.html?category=" + category + "&categories=" + JSON.stringify(obj);
+                    var url = "/LoginApp/saveSubCategories.html?categories="+encodeURIComponent(JSON.stringify(jsonArray));
                     $http.get(url).success(function (response) {
                         console.log(response);
                         $scope.Data = response;
@@ -68,11 +80,17 @@
         </script>
 
         <div ng-app="subCategoryList" ng-controller="myController">
+            <select name="categoryList" id="category" ng-model="selectedCategory" ng-change="removeList()">
+                <option value = "">Select Category</option>
+            <c:forEach items="${categories}" var="category">
+                <option value="${category.categoryId}"><c:out value="${category.categoryName}"/></option>
+            </c:forEach>
+            </select> 
             <ul>
                 <li ng-repeat="x in products">{{x}}<span ng-click="removeItem($index)"  style="cursor:pointer;">        ×</span></li>
             </ul>
             <input ng-model="addMe" id="add">
-            <button ng-click="addItem()">Add</button>
+            <br><br><button ng-click="addItem()">Add</button>
             <button ng-click="saveData()">Submit</button><br>
             <p><b>{{errortext}}</b></p>
             <p><b>{{Data}}</b></p>
