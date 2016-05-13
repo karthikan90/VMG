@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.vmg.bean.RegisterBean;
-import com.vmg.helper.ProductList;
 import com.vmg.helper.ProjectHelper;
 import com.vmg.model.Category;
 import com.vmg.model.Product;
@@ -201,15 +200,14 @@ public class LoginController {
                 product.setProductMeasurement(measurement);
                 
                 String catId = (String) jsonObject.get("catId");
-                product.setProductQuantity(Integer.parseInt(catId.trim()));
+                product.setCatId(Integer.parseInt(catId.trim()));
                 
                 String subCatId = (String) jsonObject.get("subCatId");
-                product.setProductQuantity(Integer.parseInt(subCatId.trim()));
+                product.setSubCatId(Integer.parseInt(subCatId.trim()));
                 
                 productList.add(product);
                 
             }
-                System.out.println("==============================================="+productList);
                 
                 if(productList.size() > 0){
                     categoryService.saveProductList(productList);
