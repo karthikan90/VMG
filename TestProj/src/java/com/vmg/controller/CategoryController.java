@@ -63,12 +63,12 @@ public class CategoryController {
                      redirectAttributes.addFlashAttribute("isExist","existed");
                      redirectAttributes.addFlashAttribute("categoryAdded","Category Already Existed.. Please Enter Some Other One ");
                     return new ModelAndView("redirect:/Category.html");
-                }else{
+                    }else{
                     Category category = projectHelper.prepareModelForCategory(categoryBean);
-                    categoryService.addCategory(category);
+                        categoryService.addCategory(category);
                     return new ModelAndView("redirect:/Category.html");
+                    }
                 }
-        }
         
         @RequestMapping(value = "/subcategory", method = RequestMethod.GET)
 	public ModelAndView subCategoryPage() {
@@ -80,20 +80,22 @@ public class CategoryController {
         }
         
         @RequestMapping(value = "/saveSubCategories", method = RequestMethod.GET)
-	public ModelAndView saveSubCategories(@RequestParam("categories") String categories,@RequestParam("category") String category) {
+	public ModelAndView saveSubCategories(@RequestParam("categories") String categories) {
             
             SubCategory subCategory = new SubCategory();
-            
             try{
-                String jsonString = categories;
-                JSONObject jsonResult = new JSONObject(jsonString);
-                JSONArray data = jsonResult.getJSONArray(category);
+                JSONArray data = new JSONArray(categories);
                 for(int i = 0 ; i < data.length() ; i++) {
-                    subCategory.setSubCategoryName(data.getString(i));
-                    subCategory.setCategoryId(Integer.parseInt(category));
-                    categoryService.addSubCategory(subCategory);
-                     System.out.println(""+data.getString(i));
-                 }
+                    JSONObject jsonObject = data.getJSONObject(i);
+                    System.out.println(" "+jsonObject.get("catId"));
+                    subCategory.setCategoryId(Integer.parseInt((String)jsonObject.get("catId")));
+                    JSONArray jsonArray = jsonObject.getJSONArray("catNames");
+                    for(int j = 0 ; j < jsonArray.length() ; j++){
+                        System.out.println(" "+jsonArray.getString(j));
+                        subCategory.setSubCategoryName(jsonArray.getString(j));
+                        categoryService.addSubCategory(subCategory);
+                    }
+                }
             }catch(JSONException | NumberFormatException exception){
                 System.out.println(" "+exception.getMessage());
             }
