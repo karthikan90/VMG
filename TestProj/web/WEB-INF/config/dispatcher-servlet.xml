@@ -59,6 +59,8 @@ http://www.springframework.org/schema/mvc
 			<list>
 				<value>com.vmg.model.Register</value>
 				<value>com.vmg.model.Category</value>
+				<value>com.vmg.model.SubCategory</value>
+				<value>com.vmg.model.Product</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">
