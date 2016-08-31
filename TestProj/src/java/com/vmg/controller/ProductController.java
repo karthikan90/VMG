@@ -7,10 +7,15 @@ package com.vmg.controller;
 
 import com.vmg.model.Product;
 import com.vmg.service.ProductService;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,53 +36,27 @@ public class ProductController {
     @RequestMapping(value = "/saveProductDetails", method = RequestMethod.GET)
 	public ModelAndView saveProductDetails(@RequestParam("productsList") String productsList)  {
             
-           Product product = null;
-           
            List<Product> productList = new ArrayList<>();
            
-            JSONParser parser = new JSONParser();
+            ObjectMapper objectMapper = new ObjectMapper();
+            
            
             try{
-                
-                org.json.simple.JSONArray a = (org.json.simple.JSONArray) parser.parse(productsList);
-                
-                for (Object o : a) {
-                    
-                product= new Product();
-                
-                org.json.simple.JSONObject jsonObject = (org.json.simple.JSONObject) o;
+                 JSONArray jsonArray = new JSONArray(productsList);
+                 for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                    Product product = objectMapper.readValue(jsonObject.toString(), Product.class);
+                    productList.add(product);
+                }
              
-                String productName = (String) jsonObject.get("productName");
-                product.setProductName(productName);
-
-                String productBrand = (String) jsonObject.get("productBrand");
-                product.setProductBrand(productBrand);
-                
-                String productPrice = (String) jsonObject.get("productPrice");
-                product.setProductPrice(Integer.parseInt(productPrice));
-                
-                String productQuantity = (String) jsonObject.get("productQuantity");
-                product.setProductQuantity(Integer.parseInt(productQuantity));
-                
-                String measurement = (String) jsonObject.get("measurement");
-                product.setProductMeasurement(measurement);
-                
-                String catId = (String) jsonObject.get("catId");
-                product.setCatId(Integer.parseInt(catId.trim()));
-                
-                String subCatId = (String) jsonObject.get("subCatId");
-                product.setSubCatId(Integer.parseInt(subCatId.trim()));
-                
-                productList.add(product);
-                
-            }
-                
-                if(productList.size() > 0){
+                if(!productList.isEmpty()){
                     productService.saveProductList(productList);
                 }
-            }catch(ParseException exception){
-                System.out.println(" "+exception.getMessage());
-            }
+            } catch (JSONException ex) {
+            Logger.getLogger(ProductController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ProductController.class.getName()).log(Level.SEVERE, null, ex);
+        }
                 ModelAndView modelAndView = new ModelAndView("success");
                 modelAndView.addObject("response", "Your data has been saved successfully");
 		return  modelAndView;

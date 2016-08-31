@@ -12,6 +12,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
  *
@@ -19,6 +21,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "Products")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Product implements Serializable {
 
     @Id
@@ -39,6 +42,7 @@ public class Product implements Serializable {
     private int productQuantity;
 
     @Column(name = "product_measurement")
+    @JsonProperty("measurement")
     private String productMeasurement;
 
     @Column(name = "fk_subcat_id")
