@@ -52,9 +52,7 @@ public class ProductController {
                 if(!productList.isEmpty()){
                     productService.saveProductList(productList);
                 }
-            } catch (JSONException ex) {
-            Logger.getLogger(ProductController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+            } catch (JSONException | IOException ex) {
             Logger.getLogger(ProductController.class.getName()).log(Level.SEVERE, null, ex);
         }
                 ModelAndView modelAndView = new ModelAndView("success");
